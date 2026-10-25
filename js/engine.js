@@ -53,8 +53,8 @@ function update0(dt){tt+=dt;for(const t of toasts)t.t-=dt;toasts=toasts.filter(t
  const tgt=p.x-130+p.face*20;G.cam+=(tgt-G.cam)*Math.min(1,dt*5);G.cam=clamp(G.cam,0,LW-VW);if(G.bossOn)G.cam+=((404*T)-G.cam)*Math.min(1,dt*4);
  for(const ck of CHECKS)if(!ck.lit&&p.x>ck.c*T){ck.lit=true;G.check=ck.c;sfx('check');burst(ck.c*T+8,surf(ck.c)*T-26,'#ffc061',14);
   toast(ck.c===96?'Sanjaya: "The road is long. He walks it anyway."':ck.c===200?'Sanjaya: "Among the ruins, the old gods still keep their lamps."':ck.c===330?'Sanjaya: "Twelve years of forest. This is only the first."':'Sanjaya: "The deep forest is listening. Something waits."',3.6)}
- for(const a of G.arrowsF){a.x+=a.vx*dt;a.life-=dt;if(solid(Math.floor(a.x/T),Math.floor(a.y/T))){a.life=0;burst(a.x,a.y,'#c8b088',4,40);sfx('ahit')}
-  for(const e of G.ents)if(e.alive&&!e.pick&&ov({x:a.x,y:a.y-2,w:a.w,h:a.h},e)){hurtFoe(e,a.deva?2:1,Math.sign(a.vx));a.life=0;sfx('ahit');break}
+ for(const a of G.arrowsF){a.x+=a.vx*dt;a.life-=dt;if(solid(Math.floor(a.x/T),Math.floor(a.y/T))){a.life=0;burst(a.x,a.y,'#c8b088',4,40);sfx('thunk')}
+  for(const e of G.ents)if(e.alive&&!e.pick&&ov({x:a.x,y:a.y-2,w:a.w,h:a.h},e)){hurtFoe(e,a.deva?2:1,Math.sign(a.vx));a.life=0;sfx('athit');break}
   if(G.boss&&a.life>0&&G.boss.hp>0&&ov({x:a.x,y:a.y-2,w:a.w,h:a.h},G.boss)){hurtBoss(a.deva?2:1);a.life=0}
   for(const r of G.rocks)if(a.life>0&&r.alive&&Math.hypot(a.x-r.x,a.y-r.y)<10){r.alive=false;a.life=0;burst(r.x,r.y,'#6e6882',8);sfx('rock');G.score+=10}}
  G.arrowsF=G.arrowsF.filter(a=>a.life>0&&a.x>G.cam-20&&a.x<G.cam+VW+20);
@@ -94,16 +94,16 @@ function drawWorld0(){const cam=Math.round(G.cam);const sx=shake?(Math.random()-
  if(G.bossOn){ctx.fillStyle='#30303e';ctx.fillRect(404*T-cam-2,0,6,LH);ctx.fillStyle='#6c6c84';ctx.fillRect(404*T-cam-1,0,1,LH)}
  for(const e of G.ents){if(!e.alive||!e.pick)continue;const ex=X(e.x),ey=Math.round(e.y+Math.sin(e.bob)*2);if(ex<-20||ex>VW+20)continue;
   const im=e.t==='orb'?IMG.orb[(tt*8|0)%4]:IMG[e.t];if(e.t==='orb'){ctx.globalAlpha=0.35;ctx.fillStyle='#fff2a0';ctx.beginPath();ctx.arc(ex,ey+2,10+Math.sin(tt*6)*2,0,7);ctx.fill();ctx.globalAlpha=1}ctx.drawImage(im,ex-im.width/2,ey-im.height/2+4)}
- const d=G.dog;{const run=Math.abs(d.vx)>10,fr=d.barkT>0&&ART.im.dog?'bark':run?String((d.t*14|0)%6):'sit'+((tt*3|0)%2);if(run){SQY=1+0.06*Math.sin(d.t*28);SQX=2-SQY}else{SQY=1+0.03*Math.sin(tt*4)}const im=spr('dog'+fr,()=>dogSprite(fr));drawS(im,X(d.x),Math.round(d.y)+15,d.face<0,false);
+ const d=G.dog;{const run=Math.abs(d.vx)>10,fr=typeof dogFrame==='function'?dogFrame(d):run?String((d.t*14|0)%6):'sit'+((tt*3|0)%2);if(run){SQY=1+0.06*Math.sin(d.t*28);SQX=2-SQY}else{SQY=1+0.03*Math.sin(tt*4)}const im=spr('dog'+fr,()=>dogSprite(fr));drawS(im,X(d.x),Math.round(d.y)+15,d.face<0,false);
   if(d.barkT>0)txt('!',X(d.x)+d.face*8,d.y-12,'#ffe070','c')}
  for(const e of G.ents){if(!e.alive||e.pick)continue;const ex=X(e.x);if(ex<-40||ex>VW+40)continue;let im;
-  if(e.t==='boar'){const fr=e.st==='tell'?'tell':e.st==='charge'?'r'+((tt*14|0)%4):e.vx?'r'+((tt*7|0)%4):'idle';im=spr('boar'+fr,()=>boarSprite(fr));if(e.st==='tell'&&(tt*16|0)%2)drawExcl(ex,e.y-10)}
-  else if(e.t==='bird'){const fr=e.st==='dive'?'d':String((tt*8|0)%2);im=spr('bird'+fr,()=>birdSprite(fr))}
+  if(e.t==='boar'){const fr=e.st==='tell'?'tell':e.st==='charge'?'c'+((tt*14|0)%4):e.vx?'r'+((tt*7|0)%4):'idle';im=spr('boar'+fr,()=>boarSprite(fr));if(e.st==='tell'&&(tt*16|0)%2)drawExcl(ex,e.y-10)}
+  else if(e.t==='bird'){const fr=e.st==='dive'?'d':String((tt*10|0)%4);im=spr('bird'+fr,()=>birdSprite(fr))}
   else{im=foeImg(e)}
   {const w=Math.sin(tt*5+e.x*0.1);SQY=1+0.05*w;SQX=1-0.04*w;if(e.st==='charge'){SQX=1.12;SQY=0.92}}drawS(im,ex,Math.round(e.y+e.h),e.face<0,e.flash>0,e.dying?1:0)}
- const b=G.boss;if(b){const fr=b.st==='tell'?'tell':b.st==='charge'?'r'+((tt*12|0)%4):b.st==='wind'||b.st==='throw'?'throw':b.st==='stun'?'stun':'i'+((tt*2|0)%2);const im=spr('vaka'+fr,()=>vakaSprite(fr));
+ const b=G.boss;if(b){const fr=b.st==='tell'?'tell':b.st==='charge'?'r'+((tt*12|0)%4):b.st==='wind'||b.st==='throw'?'throw':b.st==='stun'?'stun':'i'+((tt*2|0)%2);const im=(typeof vakaRig==='function'&&vakaRig(b))||spr('vaka'+fr,()=>vakaSprite(fr));
   if(b.st==='tell'&&(tt*14|0)%2)drawExcl(X(b.x),b.y-14);if(b.st==='stun')for(let i=0;i<3;i++){const a=tt*4+i*2.1;ctx.fillStyle='#ffe070';ctx.fillRect(X(b.x)+Math.cos(a)*12+b.face*6,b.y+2+Math.sin(a)*3,2,2)}
-  {const w=Math.sin(tt*2.6);SQY=1+0.03*w;SQX=1-0.02*w;if(b.st==='charge'){SQX=1.08;SQY=0.94}}drawS(im,X(b.x),Math.round(b.y+b.h)+2,b.face<0,b.flash>0,b.st==='die'?((tt*10|0)%2):0)}
+  {const w=Math.sin(tt*2.6);SQY=1+0.03*w;SQX=1-0.02*w;if(b.st==='charge'){SQX=1.08;SQY=0.94}if(im.rig){SQX=1;SQY=1}}drawS(im,X(b.x),Math.round(b.y+b.h)+2,b.face<0,b.flash>0&&!im.rig,b.st==='die'?((tt*10|0)%2):0)}
  const p=G.p;if(!(p.inv>0&&!p.dead&&(tt*20|0)%2)){const deva=p.deva>0;let fr;
   if(p.dead||p.act==='hurt')fr='hurt';else if(p.act)fr=p.act;else if(!p.ground)fr=p.vy<0?'jump':'fall';else if(Math.abs(p.vx)>8)fr='run'+((p.anim*2.1|0)%8);else fr='idle'+((tt*4|0)%4);
   const im=getHero(fr,deva);if(deva){ctx.globalAlpha=0.3+Math.sin(tt*10)*0.1;ctx.fillStyle='#fff2a0';ctx.beginPath();ctx.ellipse(X(p.x),p.y+p.h/2,16,20,0,0,7);ctx.fill();ctx.globalAlpha=1}

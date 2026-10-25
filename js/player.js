@@ -37,12 +37,13 @@ function spinHits(p){const cx=p.x,cy=p.y+p.h/2,R0=p.deva>0?34:28,dmg=TUNE.dmg[we
  for(const f of G.foes)if(Math.hypot(f.x-cx,f.y-cy)<R0)f.life=0;
  const b=G.boss;if(b&&b.hp>0&&b.spinId!==G.spinId&&ov({x:cx,y:cy-R0,w:R0*2,h:R0*2},b)){b.spinId=G.spinId;hurtBoss(dmg)}
  if(Math.random()<0.7){const a=p.spinA;addP(cx+Math.cos(a)*R0*0.8,cy+Math.sin(a)*R0*0.8,0,0,p.deva>0?'#ffe070':'#dff4ff',0.2,0)}}
-function updDog(dt){const d=G.dog,p=G.p;d.t+=dt;d.bark-=dt;d.w=14;d.h=14;d.acd=(d.acd||0)-dt;if(d.barkT>0)d.barkT-=dt;
+function updDog(dt){const d=G.dog,p=G.p;d.t+=dt;d.bark-=dt;d.ap=(d.ap||0)+dt*Math.abs(d.vx)/9;d.w=14;d.h=14;d.acd=(d.acd||0)-dt;if(d.barkT>0)d.barkT-=dt;
  let tx=p.x-p.face*22,foe=null;
  for(const e of G.ents)if(e.alive&&!e.pick&&!e.dying&&e.st!=='hang'&&Math.abs(e.x-d.x)<100&&Math.abs(e.y-d.y)<60){foe=e;break}
- if(foe&&d.bark<=0){d.bark=2.5+Math.random()*2;sfx('bark');d.barkT=0.6;d.face=Math.sign(foe.x-d.x)||1}
+ if(!foe&&d.bark<=0&&d.ground&&Math.random()<dt*TUNING.dog.idleBarkRate){d.bark=5+Math.random()*4;sfx('bark');d.barkT=0.6}
+ if(foe&&d.bark<=0){d.bark=TUNING.dog.barkGap+Math.random()*2;sfx('bark');d.barkT=0.6;d.face=Math.sign(foe.x-d.x)||1}
  if(d.state==='atk'){d.at-=dt;if(d.tgt&&d.tgt.alive&&!d.tgt.dying&&!d.hit&&ov(d,d.tgt)){d.hit=true;hurtFoe(d.tgt,1,d.face);sfx('bite')}if(d.at<=0||(d.hit&&d.ground))d.state='follow'}
- else if(foe&&d.acd<=0&&d.ground&&Math.abs(foe.x-d.x)<70&&Math.random()<dt*1.5){d.state='atk';d.tgt=foe;d.hit=false;d.at=0.7;d.acd=3+Math.random()*2;d.face=Math.sign(foe.x-d.x)||1;d.vx=d.face*190;d.vy=-210;d.barkT=0.4;sfx('bark')}
+ else if(foe&&d.acd<=0&&d.ground&&Math.abs(foe.x-d.x)<TUNING.dog.attackRange&&Math.random()<dt*TUNING.dog.attackRate){d.state='atk';d.tgt=foe;d.hit=false;d.at=0.7;d.acd=TUNING.dog.attackCooldown+Math.random()*2;d.face=Math.sign(foe.x-d.x)||1;d.vx=d.face*190;d.vy=-210;d.barkT=0.4;sfx('bark')}
  else{if(d.state==='rush'){tx=p.x-p.face*12;if(Math.abs(d.x-tx)<10)d.state='follow'}const dx=tx-d.x;d.vx=Math.abs(dx)<6?0:clamp(dx*4,-170,170);if(d.vx)d.face=Math.sign(d.vx);
   if(d.ground&&(d.wall||(Math.abs(dx)>30&&p.y<d.y-20)))d.vy=-320}
  d.vy=Math.min(TUNE.maxFall,d.vy+TUNE.grav*dt);moveBody(d,dt,true);

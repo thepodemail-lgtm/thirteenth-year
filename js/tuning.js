@@ -56,6 +56,20 @@ const TUNING = {
   bossHP: 40,        // Vaka's health
 
   // ---------- Sound ----------
-  musicVolume: 0.55, // music loudness, 0 (silent) to 1 (full)
-  sfxVolume: 0.5,    // sound-effect loudness, 0 to 1
+  musicVolume: 0.2,  // music loudness, 0 (silent) to 1 (full). Was 0.55; lowered so SFX read clearly.
+  sfxVolume: 1.0,    // sound-effect loudness, 0 to 1. Was 0.5.
+  // ---------- Animation ----------
+  anim: {
+    apexVy: 120,     // jump: vertical speed below this shows the "apex" pose
+    bossRig: true,   // true = Vaka moves limb by limb; false = old still picture
+    bossWalk: 30,    // Vaka's slow stalking speed between attacks (pixels/sec)
+  },
+  // ---------- Dog ----------
+  dog: {
+    barkGap: 3,          // min seconds between barks when an enemy is near
+    idleBarkRate: 0.08,  // chance per second of a random bark with no enemy near
+    attackRange: 95,     // how close (pixels) an enemy must be before the dog leaps
+    attackRate: 2.5,     // chance per second to leap when in range and ready
+    attackCooldown: 3,   // min seconds between leaps
+  },
 };
