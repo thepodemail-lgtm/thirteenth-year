@@ -45,7 +45,7 @@ canvas{display:block;image-rendering:pixelated;border-radius:6px;background:#000
 <script>
 (function(){
 const $=id=>document.getElementById(id);
-const TR={stage:new Audio('https://cdn.jsdelivr.net/gh/thepodemail-lgtm/thirteenth-year-music@main/victory-at-the-peak.mp3'),boss:new Audio('https://cdn.jsdelivr.net/gh/thepodemail-lgtm/thirteenth-year-music@main/last-stand-at-the-spire.mp3')};
+const TR={stage:new Audio('https://cdn.jsdelivr.net/gh/thepodemail-lgtm/thirteenth-year-music@main/stage1-v2.mp3'),boss:new Audio('https://cdn.jsdelivr.net/gh/thepodemail-lgtm/thirteenth-year-music@main/last-stand-at-the-spire.mp3')};
 for(const a of Object.values(TR)){a.loop=true;a.preload='auto';a.volume=TUNING.musicVolume}
 let cur=null,muted=false,paused=false;
 function music(k){for(const n in TR)if(n!==k)TR[n].pause();cur=TR[k]?k:null;if(!cur)return false;const a=TR[cur];if(a.currentTime>0&&k==='stage'){}else a.currentTime=0;a.muted=muted;if(!paused)a.play().catch(()=>{});return true}

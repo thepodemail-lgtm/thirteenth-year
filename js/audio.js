@@ -43,7 +43,7 @@ const SFX={
 function sfx(n){if(AU.ctx&&!S.mute&&SFX[n])try{SFX[n]()}catch(e){}}
 SONG.deva={step:60/200/2,lead:[72,76,79,84,79,76,72,0,74,77,81,86,81,77,74,0,76,79,83,88,83,79,76,79,77,81,84,89,88,86,84,83],
  bass:[48,60,48,60,50,62,50,62,52,64,52,64,53,65,55,67],drum:[1,2,2,2,1,2,2,1],lt:'square',lv:0.06};
-const REM={on:true,el:{},cur:null,url:{stage:'https://cdn.jsdelivr.net/gh/thepodemail-lgtm/thirteenth-year-music@main/victory-at-the-peak.mp3',boss:'https://cdn.jsdelivr.net/gh/thepodemail-lgtm/thirteenth-year-music@main/last-stand-at-the-spire.mp3'}};
+const REM={on:true,el:{},cur:null,url:{stage:'https://cdn.jsdelivr.net/gh/thepodemail-lgtm/thirteenth-year-music@main/stage1-v2.mp3',boss:'https://cdn.jsdelivr.net/gh/thepodemail-lgtm/thirteenth-year-music@main/last-stand-at-the-spire.mp3'}};
 function remPause(){for(const k in REM.el){try{REM.el[k].pause()}catch(_){}}REM.cur=null}
 function remFail(){if(!REM.on)return;REM.on=false;remPause();const k=AU.want;AU.want=null;if(k)music(k,0.6)}
 function remPlay(k){if(!REM.on||!REM.url[k])return false;let e=REM.el[k];if(!e){try{e=new Audio(REM.url[k]);e.loop=true;e.preload='auto';e.addEventListener('error',remFail);REM.el[k]=e}catch(_){REM.on=false;return false}}if(REM.cur&&REM.cur!==e)REM.cur.pause();if(k==='boss'&&REM.cur!==e)e.currentTime=0;REM.cur=e;e.muted=!!S.mute;if(state!=='pause'){const pr=e.play();if(pr&&pr.catch)pr.catch(()=>{if(REM.cur===e)remFail()})}setTimeout(()=>{if(REM.on&&REM.cur===e&&e.readyState<2&&state!=='pause')remFail()},12000);return true}
