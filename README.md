@@ -24,3 +24,19 @@ Plain HTML + JavaScript, no build step. Edit a file on github.com and GitHub Pag
 All game scripts share one global scope, so load order in `index.html` matters.
 
 Music: `victory-at-the-peak.mp3` and `last-stand-at-the-spire.mp3` from the `thirteenth-year-music` repo via jsDelivr; falls back to built-in chiptune if they can't load.
+
+## Art pack (assets/art/)
+| Asset | Used for |
+|---|---|
+| `vel.png` | Vel: idle, run1/run2, jump (also fall + spin body), aim (bow shot), strike (staff pose with a sword painted in; gold blade in Deva form), hurt |
+| `dog.png` | Dog: run1/run2, sit (idle), bark (when barking) |
+| `boar.png` | Boar enemy: stand / charge, 2-frame gait; red tint on the charge tell |
+| `hawk.png` | Bird enemy: wings up / wings down (dive uses wings down) |
+| `vaka.png` | Boss Vaka (bob/tints per state) |
+| `title.png` | Title screen (key art) |
+| `far.png` | Far parallax (jungle panorama, hazed) |
+| `ruins.png` | Ruins parallax, fades in after the first stretch (hazed) |
+| `arena.png` | Boss arena background, fades in near the boss gate |
+| `tiles.png` | Stone brick ground tiles (red beam platforms stay procedural) |
+
+`frames.json` holds frame rects `[x,y,w,h]`. `js/art.js` loads it all after boot; any file that fails keeps its procedural drawing. Hitboxes are unchanged. Originals are in `assets/art/src/`, and the Python/Pillow scripts that made the PNGs are in `assets/art/tools/`.

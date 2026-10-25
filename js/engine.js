@@ -85,7 +85,7 @@ function par(img,f,y=0){const w=img.width;let x=-((G?G.cam:tt*20)*f)%w;if(x>0)x-
 function drawWorld0(){const cam=Math.round(G.cam);const sx=shake?(Math.random()-0.5)*shake:0,sy=shake?(Math.random()-0.5)*shake:0;
  ctx.drawImage(BG.sky,0,0);par(BG.far,0.12,0);
  const ruinA=clamp((G.cam-1800)/1500,0,1);if(ruinA>0){ctx.globalAlpha=ruinA;par(BG.ruin,0.3,6);ctx.globalAlpha=1}
- par(BG.mid,0.5,10);ctx.globalAlpha=0.8;par(BG.shaft,0.6,0);ctx.globalAlpha=1;
+ par(BG.mid,0.5,10);drawArena();ctx.globalAlpha=0.8;par(BG.shaft,0.6,0);ctx.globalAlpha=1;
  ctx.fillStyle='rgba(220,230,210,0.10)';ctx.fillRect(0,0,VW,VH);
  ctx.save();ctx.translate(Math.round(sx),Math.round(sy)+CAMY-12);
  ctx.drawImage(BG.level,cam,0,VW,LH,0,0,VW,LH);
@@ -94,7 +94,7 @@ function drawWorld0(){const cam=Math.round(G.cam);const sx=shake?(Math.random()-
  if(G.bossOn){ctx.fillStyle='#30303e';ctx.fillRect(404*T-cam-2,0,6,LH);ctx.fillStyle='#6c6c84';ctx.fillRect(404*T-cam-1,0,1,LH)}
  for(const e of G.ents){if(!e.alive||!e.pick)continue;const ex=X(e.x),ey=Math.round(e.y+Math.sin(e.bob)*2);if(ex<-20||ex>VW+20)continue;
   const im=e.t==='orb'?IMG.orb[(tt*8|0)%4]:IMG[e.t];if(e.t==='orb'){ctx.globalAlpha=0.35;ctx.fillStyle='#fff2a0';ctx.beginPath();ctx.arc(ex,ey+2,10+Math.sin(tt*6)*2,0,7);ctx.fill();ctx.globalAlpha=1}ctx.drawImage(im,ex-im.width/2,ey-im.height/2+4)}
- const d=G.dog;{const run=Math.abs(d.vx)>10,fr=run?String((d.t*14|0)%6):'sit'+((tt*3|0)%2);if(run){SQY=1+0.06*Math.sin(d.t*28);SQX=2-SQY}else{SQY=1+0.03*Math.sin(tt*4)}const im=spr('dog'+fr,()=>dogSprite(fr));drawS(im,X(d.x),Math.round(d.y)+15,d.face<0,false);
+ const d=G.dog;{const run=Math.abs(d.vx)>10,fr=d.barkT>0&&ART.im.dog?'bark':run?String((d.t*14|0)%6):'sit'+((tt*3|0)%2);if(run){SQY=1+0.06*Math.sin(d.t*28);SQX=2-SQY}else{SQY=1+0.03*Math.sin(tt*4)}const im=spr('dog'+fr,()=>dogSprite(fr));drawS(im,X(d.x),Math.round(d.y)+15,d.face<0,false);
   if(d.barkT>0)txt('!',X(d.x)+d.face*8,d.y-12,'#ffe070','c')}
  for(const e of G.ents){if(!e.alive||e.pick)continue;const ex=X(e.x);if(ex<-40||ex>VW+40)continue;let im;
   if(e.t==='boar'){const fr=e.st==='tell'?'tell':e.st==='charge'?'r'+((tt*14|0)%4):e.vx?'r'+((tt*7|0)%4):'idle';im=spr('boar'+fr,()=>boarSprite(fr));if(e.st==='tell'&&(tt*16|0)%2)drawExcl(ex,e.y-10)}

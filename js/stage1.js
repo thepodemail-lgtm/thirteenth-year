@@ -56,7 +56,7 @@ function bakeBG(){const r=rng(11),ST=R('#30303e','#5a5a6e','#8a8aa0','#c0c0d4'),
   const pal=kind===1?ST:STD;for(let y=0;y<16;y++){const off=((y>>2)&1)*4;for(let X=0;X<16;X++){const bx=(X+off)&7,by=y&3;let l=0.05+rr()*0.25-0.12;if(bx===0||by===0)l=-0.9;else if(bx===1||by===1)l+=0.35;else if(bx===7||by===3)l-=0.3;s.p(X,y,s.pick(pal,l,X,y))}}
   if(kind===1)for(let X=0;X<16;X++){s.p(X,0,pal[3]);s.p(X,1,pal[2])}
   return s.cv()};
- const tc={};for(const k of[1,2,3])for(let v=0;v<4;v++)tc[k+'_'+v]=tile(k,v);
+ const tc={};for(const k of[1,2,3])for(let v=0;v<4;v++)tc[k+'_'+v]=artTile(k,v)||tile(k,v);
  const kom=komainu();
  for(const d of DECOR){const X=d.c*T,Y=surf(d.c)*T;let im;
   if(d.k===0)im=kom;
